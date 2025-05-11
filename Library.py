@@ -30,6 +30,7 @@ class Book:
             self.is_avaible = True
             print(f"Вы вернули {self.title}")
 
+
 class FictionBook(Book):
     def __init__(self,title,author,year,genre):
         super().__init__(title,author,year)
@@ -40,6 +41,7 @@ class FictionBook(Book):
 
     def display_info(self,dop_info=""):
         super().display_info(f", Genre: {self.genre}")
+
 
 class ScienceBook(Book):
     def __init__(self,title,author,year,field):
@@ -55,6 +57,7 @@ class ScienceBook(Book):
 
 class Library:
     books : list
+
     def __init__(self):
         self.books = []
 
@@ -64,13 +67,43 @@ class Library:
     def add_book(self,book):
         self.books.append(book)
 
+    def borrow_book_by_title(self,title):
+        for i in self.books:
+            if i.title == title :
+                if i.is_avaible:
+                    print(f"Вы получили книгу: {i.title}")
+                    i.is_avaible = False
+                else:
+                    print(f"Книга: {i.title} уже выдана")
+            else:
+                print(f"У нас нет книги: {i.title}")
+
+    def return_book_by_title(self,title):
+        for i in self.books:
+            if i.title == title :
+                if i.is_avaible:
+                    print(f"Эта книга уже у нас {i.title}")
+                else:
+                    print(f"Вы вернули книгу: {i.title}")
+                    i.is_avaible = True
+            else:
+                print(f"У нас никогда не было книги : {i.title}")
+
+    def find_books_by_author(self,author):
+        for i in self.books:
+            total = 0
+            if i.author == author:
+                total+=1
+                print(i)
+            if total==0:
+                print(f"У нас книг от : {author}")
+
 
 
 a= FictionBook("sigmo","Kykold",1488,"droc")
 b= ScienceBook("anal","Niponovick",228,"Sexsologia")
 c=Book("BABY","Sigmo Sigmovick",2005)
 g= Library()
-g.add_book(c)
-g.add_book(b)
 g.add_book(a)
 g.show_available_books()
+g.find_books_by_author("Kaa")
