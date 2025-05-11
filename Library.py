@@ -10,6 +10,9 @@ class Book:
         self.year = year
         self.is_avaible= True
 
+    def __str__(self):
+        return f"Title: {self.title}, Author: {self.author}, Year: {self.year}, Avaible: {self.is_avaible}"
+
     def display_info(self,dop_info=""):
         print(f"Title: {self.title}, Author: {self.author}, Year: {self.year}, Avaible: {self.is_avaible}{dop_info}")
 
@@ -32,6 +35,9 @@ class FictionBook(Book):
         super().__init__(title,author,year)
         self.genre = genre
 
+    def __str__(self):
+        return super().__str__() + f", Genre: {self.genre}"
+
     def display_info(self,dop_info=""):
         super().display_info(f", Genre: {self.genre}")
 
@@ -40,17 +46,31 @@ class ScienceBook(Book):
         super().__init__(title,author,year)
         self.field = field
 
+    def __str__(self):
+        return super().__str__() + f", Field: {self.field}"
+
     def display_info(self,dop_info=""):
         super().display_info(f", Field: {self.field}")
 
 
+class Library:
+    books : list
+    def __init__(self):
+        self.books = []
+
+    def show_available_books(self):
+        print(*self.books,sep="\n\n")
+
+    def add_book(self,book):
+        self.books.append(book)
+
 
 
 a= FictionBook("sigmo","Kykold",1488,"droc")
-a.display_info()
 b= ScienceBook("anal","Niponovick",228,"Sexsologia")
-b.display_info()
 c=Book("BABY","Sigmo Sigmovick",2005)
-c.display_info()
-b.borrow()
-b.return_book()
+g= Library()
+g.add_book(c)
+g.add_book(b)
+g.add_book(a)
+g.show_available_books()
