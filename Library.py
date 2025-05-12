@@ -99,11 +99,77 @@ class Library:
                 print(f"У нас книг от : {author}")
 
 
+def show_menu():
+    l= input("Выберите дейсвие:\n"
+             "1. Добавить книгу\n"
+             "2. Показать доступные книги\n"
+             "3. Взять книгу\n"
+             "4. Вернуть книгу\n"
+             "5. Найти книги по автору\n"
+             "0. Выход\n"
+             "Ваш выбор: ")
+    return l
 
-a= FictionBook("sigmo","Kykold",1488,"droc")
-b= ScienceBook("anal","Niponovick",228,"Sexsologia")
-c=Book("BABY","Sigmo Sigmovick",2005)
-g= Library()
-g.add_book(a)
-g.show_available_books()
-g.find_books_by_author("Kaa")
+
+def add_b():
+        a= input("Какую книгу вы хотите добавить?:\n"
+                 "1. Обычную книгу\n"
+                 "2. Художественная книжка\n"
+                 "3. Научная книга\n"
+                 "Ваш выбор: ")
+        b= input("Название книги: ")
+        c=input("Автор книги: ")
+        d =input("Год публикации книги: ")
+        if a =="2":
+            f = input("Жанр книги: ")
+            book =FictionBook(b,c,d,f)
+        elif a=="3":
+            f = input("Научная дисциплина или Жанр публикации: ")
+            book = ScienceBook(b, c, d, f)
+        else:
+            book = Book(b,c,d)
+        return book
+
+
+
+def handle_user_input(library,t):
+    if t =="1" or ("доб" in t.lower()):
+        library.add_book(add_b())
+        print()
+    elif t =="2" or ("показ" in t.lower()):
+        library.show_available_books()
+        print()
+    elif t =="3" or ("взят" in t.lower()):
+        a= input("Введите название книги которую хотите взять: ")
+        library.borrow_book_by_title(a)
+        print()
+    elif t=="4" or ("верну" in t.lower()):
+        a = input("Введите название книги которую хотите вернуть: ")
+        library.return_book_by_title(a)
+        print()
+    elif t=="5" or ("най" in t.lower()):
+        a= input("Введите автора: ")
+        library.find_books_by_author(a)
+        print()
+    else:
+        return print("Выберите вариант из списка -_-")
+
+
+
+
+
+def main():
+    libray = Library()
+    while True:
+        y= show_menu()
+        if y=="0" :
+            print("Вот что в вашей библиотеке:")
+            print(libray.show_available_books())
+            break
+        handle_user_input(libray,y)
+
+
+
+main()
+
+
