@@ -1,3 +1,4 @@
+
 class Book:
     title: str
     author: str
@@ -69,35 +70,37 @@ class Library:
 
     def borrow_book_by_title(self,title):
         for i in self.books:
-            if i.title == title :
+            if i.title.lower() == title.lower() :
                 if i.is_avaible:
                     print(f"Вы получили книгу: {i.title}")
                     i.is_avaible = False
                 else:
                     print(f"Книга: {i.title} уже выдана")
-            else:
-                print(f"У нас нет книги: {i.title}")
+                return
+        print(f"У нас нет книги: {i.title}")
 
     def return_book_by_title(self,title):
         for i in self.books:
-            if i.title == title :
+            if i.title.lower() == title.lower() :
                 if i.is_avaible:
                     print(f"Эта книга уже у нас {i.title}")
                 else:
                     print(f"Вы вернули книгу: {i.title}")
                     i.is_avaible = True
-            else:
-                print(f"У нас никогда не было книги : {i.title}")
+                return
+        print(f"У нас никогда не было книги : {i.title}")
 
     def find_books_by_author(self,author):
         total = 0
         for i in self.books:
-            if i.author == author:
+            if i.author.lower() == author.lower():
                 total+=1
                 print(i)
             if total==0:
                 print(f"У нас книг от : {author}")
 
+    def clear (self):
+        self.books = []
 
 def show_menu():
     l= input("Выберите дейсвие:\n"
@@ -106,6 +109,7 @@ def show_menu():
              "3. Взять книгу\n"
              "4. Вернуть книгу\n"
              "5. Найти книги по автору\n"
+             "6. Очистить библиотеку\n"
              "0. Выход\n"
              "Ваш выбор: ")
     return l
@@ -162,10 +166,35 @@ def handle_user_input(library,t):
         a= input("Введите автора: ")
         library.find_books_by_author(a)
         print()
+    elif t=="6" or ("очистка" in t.lower()):
+        a=input("Вы уверены что хотите очистить библиотеку((?: ")
+        if "д" in a.lower():
+            library.clear()
+            with open(r"C:\Users\taras\OneDrive\Документы\Книги.txt", "w", encoding="utf-8"):
+                pass
+            print("Библиотека пуста...")
     else:
         return print("Выберите вариант из списка -_-")
 
 
+def parsing (line:str):
+    line=line.rstrip().split(", ")
+    itog ={}
+    for i in line:
+        key,value = i.split(": ")
+        itog[key.lower()] = value
+    is_avaible = itog["avaible"] == "True"
+    title = itog.get("title","")
+    author = itog.get("author","")
+    year = itog.get("year",0)
+    if "genre" in itog:
+        book = FictionBook(title,author,year,itog["genre"])
+    elif "field" in itog:
+        book = ScienceBook(title,author,year,itog["field"])
+    else:
+        book = Book(title,author,year)
+    book.is_avaible = is_avaible
+    return book
 
 
 
@@ -177,7 +206,8 @@ def main():
     libray = Library()
     with open(r"C:\Users\taras\OneDrive\Документы\Книги.txt", "r", encoding="utf-8") as file:
         for i in file:
-            libray.add_book(i.rstrip())
+            book = parsing(i)
+            libray.add_book(book)
     while True:
         y= show_menu()
         if y=="0" :
