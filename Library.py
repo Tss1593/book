@@ -90,8 +90,8 @@ class Library:
                 print(f"У нас никогда не было книги : {i.title}")
 
     def find_books_by_author(self,author):
+        total = 0
         for i in self.books:
-            total = 0
             if i.author == author:
                 total+=1
                 print(i)
@@ -135,6 +135,8 @@ def add_b():
 def handle_user_input(library,t):
     if t =="1" or ("доб" in t.lower()):
         library.add_book(add_b())
+        with open(r"C:\Users\taras\OneDrive\Документы\Книги.txt","a",encoding="utf-8") as file:
+            file.write(str(library.books[-1])+"\n")
         print()
     elif t =="2" or ("показ" in t.lower()):
         library.show_available_books()
@@ -142,10 +144,19 @@ def handle_user_input(library,t):
     elif t =="3" or ("взят" in t.lower()):
         a= input("Введите название книги которую хотите взять: ")
         library.borrow_book_by_title(a)
-        print()
+        with open(r"C:\Users\taras\OneDrive\Документы\Книги.txt", "r+", encoding="utf-8") as file:
+            new = [line.replace("True","False") if a in line else line for line in file]
+            file.seek(0)
+            file.writelines(new)
+            file.truncate()
     elif t=="4" or ("верну" in t.lower()):
         a = input("Введите название книги которую хотите вернуть: ")
         library.return_book_by_title(a)
+        with open(r"C:\Users\taras\OneDrive\Документы\Книги.txt", "r+", encoding="utf-8") as file:
+            new = [line.replace("False","True") if a in line else line for line in file]
+            file.seek(0)
+            file.writelines(new)
+            file.truncate()
         print()
     elif t=="5" or ("най" in t.lower()):
         a= input("Введите автора: ")
@@ -158,8 +169,15 @@ def handle_user_input(library,t):
 
 
 
+
+
+
+
 def main():
     libray = Library()
+    with open(r"C:\Users\taras\OneDrive\Документы\Книги.txt", "r", encoding="utf-8") as file:
+        for i in file:
+            libray.add_book(i.rstrip())
     while True:
         y= show_menu()
         if y=="0" :
