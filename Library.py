@@ -126,7 +126,13 @@ def add_b():
                  "Ваш выбор: ")
         b= input("Название книги: ")
         c=input("Автор книги: ")
-        d =input("Год публикации книги: ")
+        while True:
+            d = input("Год публикации книги: ")
+            if not d.isdigit():
+                print("Год должен быть числом")
+            else:
+                d=int(d)
+                break
         if a =="2":
             f = input("Жанр книги: ")
             book =FictionBook(b,c,d,f)
@@ -147,6 +153,13 @@ def handle_user_input(library,t):
         print()
     elif t =="2" or ("показ" in t.lower()):
         library.show_available_books()
+        x= len(library)
+        if x >1:
+            print(f"Количество книг в нашей библиотеке: {x}")
+        elif len(library) == 1:
+            print("У нас всего 1 книга")
+        else:
+            print("Наша библиотека пуста")
         print()
     elif t =="3" or ("взят" in t.lower()):
         a= input("Введите название книги которую хотите взять: ")
