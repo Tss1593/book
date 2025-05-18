@@ -8,6 +8,8 @@ class Book:
     def __init__(self,title,author,year):
         self.title = title
         self.author = author
+        if not isinstance(year, int):
+            raise ValueError("Год публикации должен быть целым числом")
         self.year = year
         self.is_avaible= True
 
@@ -61,7 +63,8 @@ class Library:
 
     def __init__(self):
         self.books = []
-
+    def __len__(self):
+        return len(self.books)
     def show_available_books(self):
         print(*self.books,sep="\n\n")
 
